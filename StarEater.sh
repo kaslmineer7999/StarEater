@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 
+# shellcheck disable=all
 #Author: kaslmineer7999
 #please check out the "LICENSE" file for license information
 trap 'echo -en "\033[?1049l\033[?25h";exit 0' 2
