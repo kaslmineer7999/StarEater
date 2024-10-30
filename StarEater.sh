@@ -25,7 +25,8 @@ logo(){
 /____/\__/\__,_/_/  /_____/\__,_/\__/\___/_/
 
 
-
+StarEater  Copyright (C) 2024  kaslmineer7999
+This program comes with ABSOLUTELY NO WARRANTY
 '
 
 	stty -echo
