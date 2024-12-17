@@ -40,7 +40,7 @@ pointup(){
 	pointrow="$(($RANDOM%`tput lines`))"
 	pointcol="$(($RANDOM%`tput cols`))"
 	[ "$pointrow" -le "2" ] && pointrow="$(($pointrow+3))"
-	[ "$pointrow" -le "-1" ] && pointrow="$(($pointrow- $pointrow))"
+	[ "$pointrow" -le "-1" ] && pointrow="$(($pointrow- $pointrow+1))"
 	[ "$1" = "noscore" ] || {
 		((playerscore++))
 		clear
