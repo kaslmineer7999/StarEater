@@ -10,6 +10,7 @@ playerrow="2"
 playercol="1"
 playerscore="0"
 pointavatar='\033[93m*\033[0m'
+printscreen(){ echo -en "\033[0;0Hscore: $playerscore\033[0;$((`tput cols`-(13+${#timeoutafterctr})))Htime left: `</tmp/timeoutafterctr`\033[$pointrow;${pointcol}H$pointavatar\033[$playerrow;${playercol}H$playeravatar"; }
 logo(){
 	logo='
            _  __            __
@@ -44,19 +45,27 @@ pointup(){
 	[ "$1" = "noscore" ] || {
 		((playerscore++))
 		clear
-		echo -en "score: $playerscore\033[$pointrow;${pointcol}H$pointavatar\033[$playerrow;${playercol}H$playeravatar"
+		printscreen
 	}
 }
 echo -en "\033[?1049h\033[?25l"
 clear
 logo
-pointup noscore
-echo -en "score: $playerscore\033[$pointrow;${pointcol}H$pointavatar\033[$playerrow;${playercol}H$playeravatar"
 {
-	sleep $timeoutafter
+	trap 'exit' 2
+	timeoutafterctr="$timeoutafter"
+	while [ "$timeoutafterctr" -ne "0" ]
+	do
+		echo -en "\033[0;$((`tput cols`-(10+${#timeoutafterctr})))Htime left: $timeoutafterctr"
+		echo -n "$timeoutafterctr" > /tmp/timeoutafterctr
+		sleep 1
+		timeoutafterctr="$(($timeoutafterctr-1))"
+	done
 	echo -e "\033[?1049l\033[?25hyou timedout."
 	kill -9 $$ 2>/dev/null 1>&2
 } &
+pointup noscore
+printscreen
 while [ 1 ]
 do
 	{ [ "$playerrow" = "$pointrow" ] && [ "$playercol" = "$pointcol" ]; } && pointup
@@ -66,25 +75,25 @@ do
 			clear
 			((playerrow--))
 			[ "$playerrow" -le "2" ] && playerrow="2"
-			echo -en "score: $playerscore\033[$pointrow;${pointcol}H$pointavatar\033[$playerrow;${playercol}H$playeravatar"
+			printscreen
 			;;
 		s|S)
 			clear
 			((playerrow++))
 			[ "$playerrow" -gt "`tput lines`" ] && playerrow="`tput lines`"
-			echo -en "score: $playerscore\033[$pointrow;${pointcol}H$pointavatar\033[$playerrow;${playercol}H$playeravatar"
+			printscreen
 			;;
 		a|A)
 			clear
 			((playercol--))
 			[ "$playercol" -le "0" ] && playercol="1"
-			echo -en "score: $playerscore\033[$pointrow;${pointcol}H$pointavatar\033[$playerrow;${playercol}H$playeravatar"
+			printscreen
 			;;
 		d|D)
 			clear
 			((playercol++))
 			[ "$playercol" -gt "`tput cols`" ] && playercol="`tput cols`"
-			echo -en "score: $playerscore\033[$pointrow;${pointcol}H$pointavatar\033[$playerrow;${playercol}H$playeravatar"
+			printscreen
 			;;
 	esac
 done
