@@ -3,14 +3,14 @@
 # shellcheck disable=all
 #Author: kaslmineer7999
 #please check out the "LICENSE" file for license information
-trap 'echo -en "\033[?1049l\033[?25h";exit 0' 2
+trap 'printf "\033[?1049l\033[?25h";exit 0' 2
 timeoutafter="180"
 playeravatar="\033[91mX\033[0m"
 playerrow="2"
 playercol="1"
 playerscore="0"
 pointavatar='\033[93m*\033[0m'
-printscreen(){ echo -en "\033[0;0Hscore: $playerscore\033[0;$((`tput cols`-(13+${#timeoutafterctr})))Htime left: `</tmp/timeoutafterctr`\033[$pointrow;${pointcol}H$pointavatar\033[$playerrow;${playercol}H$playeravatar"; }
+printscreen(){ printf "\033[0;0Hscore: $playerscore\033[0;$((`tput cols`-(13+${#timeoutafterctr})))Htime left: `</tmp/timeoutafterctr`\033[$pointrow;${pointcol}H$pointavatar\033[$playerrow;${playercol}H$playeravatar"; }
 logo(){
 	logo='
            _  __            __
@@ -48,7 +48,7 @@ pointup(){
 		printscreen
 	}
 }
-echo -en "\033[?1049h\033[?25l"
+printf "\033[?1049h\033[?25l"
 clear
 logo
 {
@@ -56,12 +56,12 @@ logo
 	timeoutafterctr="$timeoutafter"
 	while [ "$timeoutafterctr" -ne "0" ]
 	do
-		echo -en "\033[0;$((`tput cols`-(10+${#timeoutafterctr})))Htime left: $timeoutafterctr"
-		echo -n "$timeoutafterctr" > /tmp/timeoutafterctr
+		printf "\033[0;$((`tput cols`-(10+${#timeoutafterctr})))Htime left: $timeoutafterctr"
+		printf "$timeoutafterctr" > /tmp/timeoutafterctr
 		sleep 1
 		timeoutafterctr="$(($timeoutafterctr-1))"
 	done
-	echo -e "\033[?1049l\033[?25hyou timedout."
+	printf "\033[?1049l\033[?25hyou timedout.\n"
 	kill -9 $$ 2>/dev/null 1>&2
 } &
 pointup noscore
@@ -72,27 +72,27 @@ do
 	read -sn1 key
 	case "$key" in
 		w|W)
-			clear
 			((playerrow--))
 			[ "$playerrow" -le "2" ] && playerrow="2"
+			clear
 			printscreen
 			;;
 		s|S)
-			clear
 			((playerrow++))
 			[ "$playerrow" -gt "`tput lines`" ] && playerrow="`tput lines`"
+			clear
 			printscreen
 			;;
 		a|A)
-			clear
 			((playercol--))
 			[ "$playercol" -le "0" ] && playercol="1"
+			clear
 			printscreen
 			;;
 		d|D)
-			clear
 			((playercol++))
 			[ "$playercol" -gt "`tput cols`" ] && playercol="`tput cols`"
+			clear
 			printscreen
 			;;
 	esac
